@@ -1,0 +1,12 @@
+{
+    "name": "nodejs-imager",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "jimp": "^0.2.27",
+        "url": "^0.11.0"
+    }
+}
