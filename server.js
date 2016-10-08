@@ -28,11 +28,15 @@ http.createServer(function(req, res) {
                 if (r_width) {
                     image.resize(parseInt(r_width), parseInt(r_height));
                 }
+
                 if (c_width) {
                     image.contain(parseInt(c_width), parseInt(c_height));
                 }
+
                 if (background) {
-                    image.background(background);
+                    image.background(parseInt(background));
+                } else {
+                    image.background(image.contain);
                 }
 
                 image.getBuffer(Jimp.MIME_JPEG, function(err, result) {
