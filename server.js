@@ -12,6 +12,11 @@ http.createServer(function(req, res) {
     if (reqUrl.pathname === '/png2jpg' && req.method.toLowerCase() === 'get') {
         var url = reqUrl.query.url;
         var export_type = reqUrl.query.export_type;
+        var r_width = reqUrl.query.r_width;
+        var r_height = reqUrl.query.r_height || Jimp.AUTO;
+        var c_width = reqUrl.query.c_width;
+        var c_height = reqUrl.query.c_height || c_width;
+        var background = reqUrl.query.background;
 
 
         if (url && url.length > 0) {
@@ -20,10 +25,15 @@ http.createServer(function(req, res) {
                     return respondWithError(res, 400, err.message);
                 }
 
-                image.resize(300, Jimp.AUTO);
-                image.contain(300, 300);
-
-                //image.background( 0xFFFFFFFF );
+                if (r_width) {
+                    image.resize(r_width, r_height);
+                }
+                if (c_width) {
+                    image.contain(c_width, c_height);
+                }
+                if (background) {
+                    image.background(background);
+                }
 
                 image.getBuffer(Jimp.MIME_JPEG, function(err, result) {
                     if (err) {
