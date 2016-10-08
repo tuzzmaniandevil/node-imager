@@ -26,10 +26,10 @@ http.createServer(function(req, res) {
                 }
 
                 if (r_width) {
-                    image.resize(r_width, r_height);
+                    image.resize(parseInt(r_width), parseInt(r_height));
                 }
                 if (c_width) {
-                    image.contain(c_width, c_height);
+                    image.contain(parseInt(c_width), parseInt(c_height));
                 }
                 if (background) {
                     image.background(background);
