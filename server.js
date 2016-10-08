@@ -18,7 +18,6 @@ http.createServer(function(req, res) {
         var c_height = reqUrl.query.c_height || c_width;
         var background = reqUrl.query.background;
 
-
         if (url && url.length > 0) {
             Jimp.read(url, function(err, image) {
                 if (err) {
@@ -49,7 +48,30 @@ http.createServer(function(req, res) {
                     image.background(parseInt(background));
                 }
 
-                image.getBuffer(Jimp.MIME_JPEG, function(err, result) {
+                // Check export MIME type
+                if (export_type != Jimp.MIME_JPEG && export_type != Jimp.MIME_PNG && export_type != Jimp.MIME_BMP) {
+                    export_type = export_type.toString().toLowerCase().trim();
+                    switch (export_type) {
+                        case 'png':
+                        case 'image/png':
+                            export_type = Jimp.MIME_PNG;
+                            break;
+                        case 'jpg':
+                        case 'jpeg':
+                        case 'image/jpg':
+                        case 'image/jpeg':
+                            export_type = Jimp.MIME_JPEG;
+                            break;
+                        case 'bmp':
+                        case 'image/bmp':
+                            export_type = Jimp.MIME_BMP;
+                            break;
+                        default:
+                            return respondWithError(res, 400, 'Mime type ' + export_type + ' not supported.');
+                    }
+                }
+
+                image.getBuffer(export_type, function(err, result) {
                     if (err) {
                         return respondWithError(res, 400, err.message);
                     }
