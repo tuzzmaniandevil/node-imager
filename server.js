@@ -9,9 +9,9 @@ var settings = {
 http.createServer(function(req, res) {
     var reqUrl = urllib.parse(req.url, true);
 
-    if (reqUrl.pathname === '/png2jpg' && req.method.toLowerCase() === 'get') {
+    if (reqUrl.pathname === '/convert' && req.method.toLowerCase() === 'get') {
         var url = reqUrl.query.url;
-        var export_type = reqUrl.query.export_type;
+        var export_type = reqUrl.query.export_type || Jimp.MIME_JPEG;
         var r_width = reqUrl.query.r_width;
         var r_height = reqUrl.query.r_height || Jimp.AUTO;
         var c_width = reqUrl.query.c_width;
@@ -34,9 +34,19 @@ http.createServer(function(req, res) {
                 }
 
                 if (background) {
+                    if (background.startsWith('#')) {
+                        background = background.replace('#', '0x');
+                    }
+
+                    if (!background.startsWith('0x')) {
+                        background = '0x' + background;
+                    }
+
+                    while (background.length < 10) {
+                        background = background + 'F';
+                    }
+
                     image.background(parseInt(background));
-                } else {
-                    image.background(image.contain);
                 }
 
                 image.getBuffer(Jimp.MIME_JPEG, function(err, result) {
