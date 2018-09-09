@@ -113,7 +113,7 @@ if (cluster.isMaster) {
                             return respondWithError(res, 400, err.message);
                         }
 
-                        return respondWithResult(res, result);
+                        return respondWithResult(res, result, export_type);
                     });
                 });
             } else {
